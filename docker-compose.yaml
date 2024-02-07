@@ -1,0 +1,66 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:12-alpine
+    ports:
+      - "5432:5432"
+    container_name: backend-db
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+#  db:
+#    image: postgis/postgis:12-3.0
+#    restart: always
+#    ports:
+#      - "5432:5432"
+#    platform: linux/amd64
+#    container_name: backend-db
+#    environment:
+#      POSTGRES_UESR: postgres
+#      POSTGRES_PASSWORD: password
+#      PGDATA: /var/lib/postgresql/data
+#    volumes:
+#      - postgres_data_local:/var/lib/postgresql/data
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000 --settings=config.settings.local
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+#  redis:
+#      restart: always
+#      image: redis:alpine
+#      ports:
+#        - "6378:6379"
+#      volumes:
+#        - redisdata:/data
+#  celery:
+#    build: .
+#    command: celery -A config worker -l info
+#    volumes:
+#      - .:/code
+#    depends_on:
+#      - db
+#      - redis
+#    env_file:
+#      - secrets/.env
+#  celery-beat:
+#    build: .
+#    command: celery -A config beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+#    volumes:
+#      - .:/code
+#    depends_on:
+#      - db
+#      - redis
+#    env_file:
+#      - secrets/.env
+volumes:
+  redisdata:
+  postgres_data:

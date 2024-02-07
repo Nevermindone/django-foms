@@ -1,0 +1,41 @@
+<html>
+<head>
+  <style>
+    .file-row {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <form id="file-form">
+    {% csrf_token %}
+    <div id="file-container">
+      <div class="file-row">
+        <input type="text" name="filename" placeholder="Название файла">
+        <input type="file" name="file" placeholder="Выберите файл" accept="*">
+      </div>
+    </div>
+  </form>
+
+  <button onclick="addFileRow()">+</button>
+  <button onclick="submitFiles()">Отправить файлы</button>
+
+  <script>
+    function addFileRow() {
+      var fileContainer = document.getElementById("file-container");
+      var fileRow = document.createElement("div");
+      fileRow.classList.add("file-row");
+      fileRow.innerHTML = '<input type="text" name="filename" placeholder="Название файла"><input type="file" name="file" placeholder="Выберите файл" accept="*">';
+      fileContainer.appendChild(fileRow);
+    }
+
+    function submitFiles() {
+      var form = document.getElementById("file-form");
+      var formData = new FormData(form);
+      var request = new XMLHttpRequest();
+      request.open("POST", window.location.href);
+      request.send(formData);
+    }
+  </script>
+</body>
+</html>

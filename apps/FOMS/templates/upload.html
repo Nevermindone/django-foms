@@ -1,0 +1,9 @@
+<!--{% extends "base.html" %}-->
+{% block content_out %}
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+    <button onclick="addFileRow()">+</button>
+    <button onclick="submitFiles()">Отправить файлы</button>
+</form>
+{% endblock %}

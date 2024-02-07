@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class = "container">
+    <h4>Форма редактирования запроса</h4>
+    <form method="post">{% csrf_token %}
+        {{ second_form.text|as_crispy_field }}
+        {{ form|crispy}}
+        {{ second_form.salary_to|as_crispy_field }}
+        {{ second_form.area|as_crispy_field }}
+        {{ second_form.experience|as_crispy_field }}
+        {{ second_form.skill|as_crispy_field }}
+        {{ second_form.education|as_crispy_field }}
+        {{ second_form.citizenship|as_crispy_field }}
+        {{ second_form.work_ticket|as_crispy_field }}
+        {{ second_form.age_from|as_crispy_field }}
+        {{ second_form.age_to|as_crispy_field }}
+        {{ second_form.gender|as_crispy_field }}
+        <h4>Тип занятости</h4>
+        {{ second_form.employment_full|as_crispy_field }}
+        {{ second_form.employment_part|as_crispy_field }}
+        {{ second_form.employment_project|as_crispy_field }}
+        {{ second_form.employment_volunteer|as_crispy_field }}
+        {{ second_form.employment_probation|as_crispy_field }}
+        <h4>График работы</h4>
+        {{ second_form.schedule_fullday|as_crispy_field }}
+        {{ second_form.schedule_shift|as_crispy_field }}
+        {{ second_form.schedule_flexible|as_crispy_field }}
+        {{ second_form.schedule_remote|as_crispy_field }}
+        {{ second_form.schedule_flyinflyout|as_crispy_field }}
+        <h4>Знание языков</h4>
+        {{ second_form.language|as_crispy_field }}
+        {{ second_form.level|as_crispy_field }}
+
+
+
+
+
+{#    <input type="submit"  class='btn btn-warning btn-block' value="Обновить">#}
+    <button onclick="myFunction()" type="submit" class='btn btn-warning btn-block'>Обновить</button>
+    <script>
+        function myFunction() {
+          var txt;
+          if (confirm("Ваш запрос принят в обработку! Ожидайте уведомление о выполнении на почту.")) {
+            txt = "You pressed OK!";
+          } else {
+              txt = "You pressed Cancel!";
+          }
+        }
+    </script>
+</form>
+
+
+
+</div>
+
+{% endblock %}

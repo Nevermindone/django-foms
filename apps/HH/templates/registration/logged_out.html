@@ -1,0 +1,16 @@
+<!--{% extends "base.html" %}-->
+{% block topbar %}{% endblock %}
+{% block content_out %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body text-center">
+                <h4 class="m-2">Logged out!</h4>
+                <a href="{% url 'login'%}">Click here to login again.</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

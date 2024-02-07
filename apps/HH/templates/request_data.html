@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %} Список{% endblock %}
+{% block content %}
+
+<div class="card">
+    <div class="card-body">
+        <p class="info-text">
+            <b>Здесь вы можете посмотреть полученные резюме и открыть контакты интересных вам кандидатов.</b>
+            <br/>
+            <i>
+                Для предварительного просмотра выберите нужные резюме галочкой и нажмите кнопку «Скачать».
+                <br/><br/>
+                Чтобы получить резюме с контактами кандидата выберите нужные резюме галочкой и нажмите кнопку «Открыть контакты».
+                Системе понадобится 15-20 мин. чтобы обработать запрос, после чего вам на почту придет уведомление с ссылкой.
+                Вам нужно снова выбрать резюме галочкой и нажать кнопку «Скачать», резюме будут сохранены уже с контактами.
+            </i>
+        </p>
+        <hr>
+        <!-- <a href="#" onclick="HTMLtoPDF()">Download PDF</a> -->
+        <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="80%">
+            <thead>
+            <tr>
+                <th> <p><input type="checkbox" id="select_all"/></p></th>
+                <th>Профессия
+                </th>
+                <th>Зарплатные ожидания
+                </th>
+                <th>Последнее место работы
+                </th>
+                <th>Контакты загружены</th>
+            </tr>
+            </thead>
+            <tbody>
+            <script>
+                var select_all = document.getElementById("select_all"); //select all checkbox
+                 var checkboxes = document.getElementsByClassName("checkbox");
+                 //checkbox items
+
+                //select all checkboxes
+                select_all.addEventListener("change", function(e){
+                for (i = 0; i < checkboxes.length; i++) {
+                  checkboxes[i].checked = select_all.checked;
+               }
+              });
+
+
+              for (var i = 0; i < checkboxes.length; i++) {
+              checkboxes[i].addEventListener('change', function(e){ //".checkbox" change
+                  //uncheck "select all", if one of the listed checkbox item is unchecked
+                  if(this.checked == false){
+                      select_all.checked = false;
+                  }
+                  //check "select all" if all checkbox items are checked
+                  if(document.querySelectorAll('.checkbox:checked').length == checkboxes.length){
+                      select_all.checked = true;
+                  }
+              });
+               }
+           </script>
+            <form action='.' method='POST'>{% csrf_token %}
+                <div class="btn-block-top-left">
+                    <button type="submit" class='btn btn-outline-info' name="button" value="Open">Открыть контакты</button>
+                    <button type="submit" class='btn btn-outline-info' name="button" value="Download">Скачать</button>
+                </div>
+                {% for i in urls %}
+                <tr>
+                    {#                <td><input type="checkbox" class="custom-control-input" id="{{ i.idq }}"></td>#}
+                    <td><input class="checkbox" type="checkbox" id="{{ i.idq }}" value="{{ i.idq }}" name="choosed"></td>
+                    <td>{{ i.name }}</td>
+                    <td>{{ i.salary_goal }}</td>
+                    <td>{{ i.last_job }}</td>
+                    {#                <td>{{ i.url }}</td>#}
+                    <td>{{ i.isdowncontact }}</td>
+                </tr>
+                {% endfor %}
+            </form>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+
+
+{#<script src="{{url_for('.static', filename='js/sort.js')}}"></script>#}
+
+{% endblock %}
