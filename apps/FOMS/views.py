@@ -1,41 +1,32 @@
-import zipfile
-import os
-from django.conf import settings
 from django.shortcuts import render
+from rest_framework.views import APIView
 
-from apps.FOMS.forms import UploadForm
-
-from django.views.generic import CreateView
-
-from apps.FOMS.serializers import FileSerializer
+from apps.FOMS.models import ArchviedFiles, BatchUpload
+from apps.FOMS.serializers import FilesSerializer
 
 
-class UploadCreateView(CreateView):
+class UploadCreateView(APIView):
 
-    def get(self, request, *args, **kwargs):
-        return render(request, 'upload.html')
+    serializer_class = FilesSerializer
 
     def post(self, request, *args, **kwargs):
-        print(request.FILES)
-        # files = request.FILES.getlist("file")
-        # print({"files": files})
-        # serializer = FileSerializer(data=files, many=True)
-        # serializer.is_valid(raise_exception=True)
-        # data = serializer.validated_data
-        # print(data)
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+        files_and_names_list = list(set(zip(data['file'], data['filename'])))
+        bu = BatchUpload(
+            archives_count=len(files_and_names_list)
+        )
+        bu.save()
+        for file_object in files_and_names_list:
+            af = ArchviedFiles(
+                name=file_object[1],
+                file=file_object[0],
+                batch=bu
+            )
+            af.save()
         return render(request, 'success.html')
 
 
 def upload(request):
-    if request.method == 'POST':
-        form = UploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            zip_file = request.FILES['file']
-            with zipfile.ZipFile(zip_file, 'r') as archive:
-                for file in archive.namelist():
-                    archive.extract(file, os.path.join(settings.MEDIA_ROOT, 'uploads/'))
-            return render(request, 'success.html')
-    else:
-        form = UploadForm()
-    return render(request, 'upload.html', {'form': form})
+    return render(request, 'upload.html')

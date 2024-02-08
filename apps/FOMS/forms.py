@@ -1,9 +1,9 @@
 from django import forms
 
-from apps.FOMS.models import File
+from apps.FOMS.models import ArchviedFiles
 
 
 class UploadForm(forms.ModelForm):
     class Meta:
-        model = File
+        model = ArchviedFiles
         fields = ['file']
