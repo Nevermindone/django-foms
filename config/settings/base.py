@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
-
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -137,3 +137,14 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'apps/HH/static')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/HH/'
+
+REDIS_HOST = config("REDIS_HOST", default="localhost")
+REDIS_PORT = config("REDIS_PORT", default="6379")
+
+REDIS_URL = "redis://{host}:{port}".format(
+    host=REDIS_HOST,
+    port=REDIS_PORT,
+)
+
+RABBIT_URL = config("RABBIT_URL", default="amqp://guest:guest@rabbit:5672/")
+

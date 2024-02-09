@@ -3,8 +3,10 @@ attrs
 cached-property
 cachetools
 certifi
+celery
 charset-normalizer
 cycler
+python-decouple
 Django
 django-storages
 djangorestframework
@@ -29,6 +31,7 @@ pytz
 requests
 requests-file
 requests-toolbelt
+redis
 rsa
 scipy
 six

@@ -34,21 +34,30 @@ services:
       - "8000:8000"
     depends_on:
       - db
-#  redis:
-#      restart: always
-#      image: redis:alpine
-#      ports:
-#        - "6378:6379"
-#      volumes:
-#        - redisdata:/data
-#  celery:
-#    build: .
-#    command: celery -A config worker -l info
-#    volumes:
-#      - .:/code
-#    depends_on:
-#      - db
-#      - redis
+  redis:
+      restart: always
+      image: redis:alpine
+      ports:
+        - "6378:6379"
+      volumes:
+        - redisdata:/data
+  celery:
+    build: .
+    command: celery -A config worker -l info
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+      - redis
+  rabbit:
+    image: rabbitmq:3-management-alpine
+    container_name: infra-rabbit
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq/
+      - rabbitmqlog:/var/log/rabbitmq
 #    env_file:
 #      - secrets/.env
 #  celery-beat:
@@ -64,3 +73,5 @@ services:
 volumes:
   redisdata:
   postgres_data:
+  rabbitmqdata:
+  rabbitmqlog:
