@@ -138,7 +138,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/HH/'
 
-REDIS_HOST = config("REDIS_HOST", default="localhost")
+REDIS_HOST = config("REDIS_HOST", default="redis")
 REDIS_PORT = config("REDIS_PORT", default="6379")
 
 REDIS_URL = "redis://{host}:{port}".format(

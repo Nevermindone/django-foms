@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 
 from apps.FOMS.models import ArchviedFiles, BatchUpload
 from apps.FOMS.serializers import FilesSerializer
+from config.celery import app
 
 
 class UploadCreateView(APIView):
@@ -25,6 +26,11 @@ class UploadCreateView(APIView):
                 batch=bu
             )
             af.save()
+        print('is sent?')
+        app.send_task(
+            "apps.FOMS.tasks.archive_processor"
+        )
+        print('is sent?')
         return render(request, 'success.html')
 
 
