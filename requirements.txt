@@ -18,6 +18,9 @@ numpy
 packaging
 pandas
 patsy
+patool
+unrar
+pyunpack
 Pillow
 platformdirs
 plotly
