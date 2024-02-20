@@ -1,6 +1,8 @@
 import os
 from rest_framework import serializers
 
+from apps.FOMS.utils import get_file_extension
+
 
 class FilesSerializer(serializers.Serializer):
     file = serializers.ListField()
@@ -10,7 +12,7 @@ class FilesSerializer(serializers.Serializer):
         for file in files:
             if file == '':
                 raise serializers.ValidationError("file field should not be empty.")
-            ext = os.path.splitext(str(file))[1]  # получение расширения файла
+            ext = get_file_extension(str(file))
             allowed_extensions = ['.zip', '.rar']
             if not ext.lower() in allowed_extensions:
                 raise serializers.ValidationError("Only ZIP or RAR files are allowed.")

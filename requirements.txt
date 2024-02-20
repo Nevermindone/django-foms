@@ -1,3 +1,9 @@
+pandas==2.1.4
+PyPDF2==2.12.1
+camelot-py[base]
+opencv-python
+psycopg2
+xlrd
 asgiref
 attrs
 cached-property
@@ -16,7 +22,6 @@ kiwisolver
 lxml
 numpy
 packaging
-pandas
 patsy
 patool
 unrar
@@ -25,7 +30,6 @@ Pillow
 platformdirs
 plotly
 protobuf
-psycopg2
 pyasn1
 pyasn1-modules
 pyparsing
@@ -44,3 +48,4 @@ urllib3
 zeep
 django-crispy-forms
 stringdist
+openpyxl

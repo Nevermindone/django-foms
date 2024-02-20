@@ -13,6 +13,22 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 from decouple import config
+import sys
+import logging
+
+
+class DefaultFilter(logging.Filter):
+    def filter(self, record):
+        # Add level so generic tools like Cloud Logs can understand our log levels
+        record.level = record.levelname
+        return True
+
+
+class SimpleLogFormatter(logging.Formatter):
+    simple_fmt = "[%(asctime)s] %(levelname)s %(name)s %(message)s"
+
+    def __init__(self):
+        super(self.__class__, self).__init__(fmt=self.__class__.simple_fmt)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -148,3 +164,25 @@ REDIS_URL = "redis://{host}:{port}".format(
 
 RABBIT_URL = config("RABBIT_URL", default="amqp://guest:guest@rabbit:5672/")
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "filters": {"default_filter": {"()": DefaultFilter}},
+    "formatters": {"configured": {"()": SimpleLogFormatter}},
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "configured",
+            "filters": ["default_filter"],
+            "stream": sys.stdout,
+        },
+    },
+    "loggers": {
+        "apps.pricing": {"handlers": ["console"], "level": "INFO", "propagate": False},
+        "django": {"level": "INFO", "handlers": ["console"]},
+        "root": {"level": "INFO", "handlers": ["console"]},
+    },
+}
+
+EMAIL_USER = config("EMAIL_USER", default="")
+EMAIL_PASSWORD = config("EMAIL_PASSWORD", default="")

@@ -31,8 +31,7 @@ class UploadCreateView(APIView):
         #     "apps.FOMS.tasks.archive_processor",
         #     [bu.pk]
         # )
-        archive_processor(bu.pk)
-        print('is sent?')
+        archive_processor(bu.pk, 'менинг')
         return render(request, 'success.html')
 
 

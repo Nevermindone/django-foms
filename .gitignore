@@ -11,3 +11,4 @@ db
 /config/static/
 /storage/
 /uploads/
+/.env

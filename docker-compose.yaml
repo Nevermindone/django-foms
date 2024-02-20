@@ -27,7 +27,7 @@ services:
 #      - postgres_data_local:/var/lib/postgresql/data
   web:
     build: .
-    command: python3 manage.py runserver 0.0.0.0:8000 --settings=config.settings.local
+    command: python manage.py runserver 0.0.0.0:8000 --settings=config.settings.local
     volumes:
       - .:/code
     ports:
