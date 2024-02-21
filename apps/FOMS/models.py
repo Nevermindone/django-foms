@@ -1,4 +1,13 @@
+import os
+
 from django.db import models
+import uuid
+
+
+def get_upload_path(instance, filename):
+    return os.path.join(
+      "uploads", str(instance.batch.id), str(filename)
+    )
 
 
 class BatchUpload(models.Model):
@@ -9,7 +18,7 @@ class BatchUpload(models.Model):
 
 class ArchviedFiles(models.Model):
     name = models.CharField(blank=True, null=True)
-    file = models.FileField(upload_to='uploads/')
+    file = models.FileField(upload_to=get_upload_path)
     batch = models.ForeignKey(to=BatchUpload, on_delete=models.CASCADE)
 
     def __str__(self):

@@ -12,3 +12,5 @@ db
 /storage/
 /uploads/
 /.env
+/pdf_dir/
+/extract_folder/

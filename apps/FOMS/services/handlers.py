@@ -17,9 +17,10 @@ class FileHandler(ABC):
 
 
 class BaseHandler(FileHandler):
-    def __init__(self, file, keyword):
+    def __init__(self, file, keyword, current_batch):
         self.file = file
         self.keyword = keyword
+        self.current_batch = current_batch
 
     def process_file(self):
         return None
@@ -44,7 +45,7 @@ class XlsFileHandler(BaseHandler):
     def process_file(self):
         logger.info(f'XlsFileHandler {self.file} has been started to process')
         results = []
-        sheet_to_df_map = pd.read_excel(f'extract_folder/{self.file}', sheet_name=None)
+        sheet_to_df_map = pd.read_excel(f'extract_folder/{self.current_batch}/{self.file}', sheet_name=None)
         keys = list(sheet_to_df_map.keys())
         for key in keys:
             df = sheet_to_df_map[key]
@@ -62,10 +63,10 @@ class DocFileHandler(BaseHandler):
     def process_file(self):
         logger.info(f'DocFileHandler {self.file} has been started to process')
 
-        initial_filepath = f'extract_folder/{self.file}'
-        pdf_filepath = f'pdf_dir/{os.path.splitext(self.file)[0]}.pdf'
+        initial_filepath = f'extract_folder/{self.current_batch}/{self.file}'
+        pdf_filepath = f'pdf_dir/{self.current_batch}/{os.path.splitext(self.file)[0]}.pdf'
 
-        export_to_pdf(initial_filepath, 'pdf_dir')
+        export_to_pdf(initial_filepath, f'pdf_dir/{self.current_batch}')
         results_list = self.parse_pdf(pdf_filepath)
         logger.info(f'File {self.file} has been finished to process. Data objects are:')
         logger.info(results_list)
@@ -75,7 +76,7 @@ class DocFileHandler(BaseHandler):
 class PDFFileHandler(BaseHandler):
     def process_file(self):
         logger.info(f'PDFFileHandler {self.file} has been started to process')
-        initial_filepath = f'extract_folder/{self.file}'
+        initial_filepath = f'extract_folder/{self.current_batch}/{self.file}'
         results_list = self.parse_pdf(initial_filepath)
         logger.info(f'File {self.file} has been finished to process. Data objects are:')
         logger.info(results_list)

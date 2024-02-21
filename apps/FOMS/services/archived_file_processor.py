@@ -28,16 +28,17 @@ class OneRowOfDataKeyword:
 
 
 class ArchiveFileProcessor:
-    def __init__(self, file, keyword, archive_name=None):
+    def __init__(self, file, keyword, archive_name=None, batch_id=None):
         self.file = file
         self.keyword = keyword
         self.archive_name = archive_name
+        self.batch_id = batch_id
         self.handler_mapping = {
-            '.xls': XlsFileHandler(file=self.file, keyword=self.keyword),
-            '.xlsx': XlsFileHandler(file=self.file, keyword=self.keyword),
-            '.doc': DocFileHandler(file=self.file, keyword=self.keyword),
-            '.docx': DocFileHandler(file=self.file, keyword=self.keyword),
-            '.pdf': PDFFileHandler(file=self.file, keyword=self.keyword),
+            '.xls': XlsFileHandler(file=self.file, keyword=self.keyword, current_batch=batch_id),
+            '.xlsx': XlsFileHandler(file=self.file, keyword=self.keyword, current_batch=batch_id),
+            '.doc': DocFileHandler(file=self.file, keyword=self.keyword, current_batch=batch_id),
+            '.docx': DocFileHandler(file=self.file, keyword=self.keyword, current_batch=batch_id),
+            '.pdf': PDFFileHandler(file=self.file, keyword=self.keyword, current_batch=batch_id),
         }
         self.dp = DescriptionProcessor(self.keyword)
         self.pp = PriceProcessor()
