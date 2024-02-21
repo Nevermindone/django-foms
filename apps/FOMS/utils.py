@@ -26,7 +26,7 @@ def get_file_extension(file_name):
     return os.path.splitext(file_name)[1]
 
 
-def send_email(recipient, attachment_path, subject, body):
+def send_email(recipient, subject, body, attachment_path=None):
     smtp_server = 'smtp.yandex.ru'
     port = 587
     from_email = settings.EMAIL_USER
@@ -40,15 +40,15 @@ def send_email(recipient, attachment_path, subject, body):
 
     body = body
     msg.attach(MIMEText(body, 'plain'))
+    if attachment_path:
+        attachment = open(attachment_path, 'rb')
 
-    attachment = open(attachment_path, 'rb')
+        part = MIMEBase('application', 'octet-stream')
+        part.set_payload(attachment.read())
+        encoders.encode_base64(part)
+        part.add_header('Content-Disposition', "attachment; filename= %s" % attachment_path)
 
-    part = MIMEBase('application', 'octet-stream')
-    part.set_payload(attachment.read())
-    encoders.encode_base64(part)
-    part.add_header('Content-Disposition', "attachment; filename= %s" % attachment_path)
-
-    msg.attach(part)
+        msg.attach(part)
 
     server = smtplib.SMTP(smtp_server, port)
     server.starttls()

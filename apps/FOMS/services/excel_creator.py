@@ -9,5 +9,5 @@ class ExcelCreator:
         responses_dicts_list = [response.to_dict() for response in self.responses]
         df = pd.DataFrame(responses_dicts_list)
         print(responses_dicts_list)
-        df = df[(df['description'].notna()) & (df['has_error'] == False)]
+        df = df[(df['description'].notna()) | (df['has_error']==True)]
         df.to_excel(filename)
