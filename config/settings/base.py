@@ -31,7 +31,7 @@ class SimpleLogFormatter(logging.Formatter):
         super(self.__class__, self).__init__(fmt=self.__class__.simple_fmt)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -46,7 +46,6 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'apps.HH',
     'apps.FOMS',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -76,8 +75,8 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        'APP_DIRS': True,
+        'DIRS': [os.path.join(BASE_DIR, 'apps/FOMS/templates')],
+        'APP_DIRS': False,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -146,13 +145,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'apps/HH/static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'apps/FOMS/static')
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = '/HH/'
+LOGIN_REDIRECT_URL = '/FOMS/'
 
 REDIS_HOST = config("REDIS_HOST", default="redis")
 REDIS_PORT = config("REDIS_PORT", default="6379")
