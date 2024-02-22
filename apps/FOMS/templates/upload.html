@@ -1,23 +1,83 @@
 <html>
 <head>
   <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
     .file-row {
       margin-bottom: 10px;
+    }
+
+    .file-row input[type="text"],
+    .file-row input[type="file"] {
+      margin-right: 10px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+      width: 250px;
+    }
+
+    button {
+      margin-top: 10px;
+      margin-right: 5px;
+      padding: 8px 15px;
+      font-size: 14px;
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    button.delete {
+      background-color: #f44336;
+    }
+
+    button.delete:hover {
+      background-color: #d32f2f;
+    }
+
+    #file-container {
+      margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
+  <h1>Форма Загрузки Файлов</h1>
+
   <form id="file-form">
     {% csrf_token %}
     <div id="file-container">
       <div class="file-row">
         <input type="text" name="filename" placeholder="Название файла">
         <input type="file" name="file" placeholder="Выберите файл" accept="*">
+        <button type="button" onclick="deleteFileRow(this)">Удалить</button>
       </div>
     </div>
   </form>
 
-  <button onclick="addFileRow()">+</button>
+  <button onclick="addFileRow()">Добавить файловую строку</button>
+  <p></p>
   <button onclick="submitFiles()">Отправить файлы</button>
 
   <script>
@@ -25,8 +85,17 @@
       var fileContainer = document.getElementById("file-container");
       var fileRow = document.createElement("div");
       fileRow.classList.add("file-row");
-      fileRow.innerHTML = '<input type="text" name="filename" placeholder="Название файла"><input type="file" name="file" placeholder="Выберите файл" accept="*">';
+      fileRow.innerHTML = `
+        <input type="text" name="filename" placeholder="Название файла">
+        <input type="file" name="file" placeholder="Выберите файл" accept="*">
+        <button type="button" onclick="deleteFileRow(this)">Удалить</button>
+      `;
       fileContainer.appendChild(fileRow);
+    }
+
+    function deleteFileRow(button) {
+      var fileRow = button.parentNode;
+      fileRow.parentNode.removeChild(fileRow);
     }
 
     function submitFiles() {
