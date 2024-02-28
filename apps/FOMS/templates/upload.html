@@ -42,6 +42,15 @@
       width: 250px;
     }
 
+    .keyword-input {
+      margin-right: 10px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+      width: 250px;
+    }
+
     button {
       margin-top: 10px;
       margin-right: 5px;
@@ -69,6 +78,7 @@
     #file-container {
       margin-bottom: 20px;
     }
+
   </style>
 </head>
 <body>
@@ -87,6 +97,7 @@
 
   <form id="file-form">
     {% csrf_token %}
+            <input type="text" name="keyword" placeholder="Ключевое слово" class="keyword-input">
     <div id="file-container">
       <div class="file-row">
         <input type="text" name="filename" placeholder="Название файла">

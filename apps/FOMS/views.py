@@ -15,6 +15,7 @@ class UploadCreateView(APIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
+        keyword = data['keyword']
         files_and_names_list = list(set(zip(data['file'], data['filename'])))
         bu = BatchUpload(
             archives_count=len(files_and_names_list)
@@ -29,9 +30,9 @@ class UploadCreateView(APIView):
             af.save()
         app.send_task(
             "apps.FOMS.tasks.archive_processor",
-            [bu.pk, 'менинг'],
+            [bu.pk, keyword],
         )
-        # archive_processor(bu.pk, 'менинг')
+        # archive_processor(bu.pk, keyword)
         return render(request, 'success.html')
 
 

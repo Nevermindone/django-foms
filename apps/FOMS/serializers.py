@@ -7,6 +7,7 @@ from apps.FOMS.utils import get_file_extension
 class FilesSerializer(serializers.Serializer):
     file = serializers.ListField()
     filename = serializers.ListField()
+    keyword = serializers.CharField(min_length=1, max_length=100)
 
     def validate_file(self, files):
         for file in files:
