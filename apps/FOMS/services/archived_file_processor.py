@@ -38,8 +38,8 @@ class ArchiveFileProcessor:
         self.handler_mapping = {
             '.xls': XlsFileHandler(file=self.file, keyword=self.keyword, current_batch=batch_id),
             '.xlsx': XlsFileHandler(file=self.file, keyword=self.keyword, current_batch=batch_id),
-            # '.doc': DocFileHandler(file=self.file, keyword=self.keyword, current_batch=batch_id),
-            # '.docx': DocFileHandler(file=self.file, keyword=self.keyword, current_batch=batch_id),
+            '.doc': DocFileHandler(file=self.file, keyword=self.keyword, current_batch=batch_id),
+            '.docx': DocFileHandler(file=self.file, keyword=self.keyword, current_batch=batch_id),
             '.pdf': PDFFileHandler(file=self.file, keyword=self.keyword, current_batch=batch_id),
         }
         self.dp = DescriptionProcessor(self.keyword)

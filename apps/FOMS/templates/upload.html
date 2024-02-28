@@ -97,7 +97,8 @@
 
   <form id="file-form">
     {% csrf_token %}
-            <input type="text" name="keyword" placeholder="Ключевое слово" class="keyword-input">
+      <input type="text" name="keyword" placeholder="Ключевое слово" class="keyword-input">
+      <input type="text" name="email" placeholder="Email для получения отчёта" class="keyword-input">
     <div id="file-container">
       <div class="file-row">
         <input type="text" name="filename" placeholder="Название файла">
@@ -109,6 +110,7 @@
 
   <button onclick="addFileRow()">Добавить файловую строку</button>
   <button onclick="submitFiles()">Отправить файлы</button>
+  <p id="status-message"></p>
 
   <script>
     function addFileRow() {
@@ -134,8 +136,18 @@
       var formData = new FormData(form);
       var request = new XMLHttpRequest();
       request.open("POST", url, true);
+      request.onload = function(event) {
+        if (request.status === 200) {
+          var statusMessage = document.getElementById("status-message");
+          statusMessage.textContent = 'Файлы приняты к обработке, ожидайте ответ на вашей почте';
+        }
+        else {
+            var statusMessage = document.getElementById("status-message");
+            statusMessage.textContent = request.response;
+        }
+      };
       request.send(formData);
-    }
+}
   </script>
 </body>
 </html>

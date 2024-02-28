@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 @app.task(time_limit=2500)
-def archive_processor(batch_id, keyword):
+def archive_processor(batch_id, keyword, email):
     archived_files = ArchviedFiles.objects.filter(
         batch_id=batch_id
     )
@@ -26,7 +26,7 @@ def archive_processor(batch_id, keyword):
     try:
         # start processing
         response_list = []
-        final_file = 'Report.xlsx'
+        final_file = f'Report num {batch_id}.xlsx'
         for file in archived_files:
             ext = get_file_extension(str(file.file))
             if ext not in ['.rar', '.zip']:
@@ -42,19 +42,19 @@ def archive_processor(batch_id, keyword):
         excel_maker = ExcelCreator(response_list)
         excel_maker.make_excel(final_file)
         send_email(
-            recipient='alexandr.jri.bystrov@yandex.ru',
+            recipient=email,
             attachment_path=final_file,
-            body='сформированный отчет',
+            body=f'сформированный отчет по ключевому слову: {keyword}, отчет номер: {batch_id}',
             subject='Отчёт по ФОМСам'
         )
-
+        os.remove(final_file)
         remove_files(current_extract_folder)
         remove_files(current_pdf_folder)
         remove_files(current_uploads_folder)
     except Exception as e:
         logger.info(f'Task has failed due to {e}')
         send_email(
-            recipient='alexandr.jri.bystrov@yandex.ru',
+            recipient=email,
             body=f'Не получилось обработать файлы из за ошибки {e}',
             subject='Отчёт по ФОМСам'
         )

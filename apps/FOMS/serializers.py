@@ -8,13 +8,14 @@ class FilesSerializer(serializers.Serializer):
     file = serializers.ListField()
     filename = serializers.ListField()
     keyword = serializers.CharField(min_length=1, max_length=100)
+    email = serializers.CharField(min_length=5, max_length=100)
 
     def validate_file(self, files):
         for file in files:
             if file == '':
                 raise serializers.ValidationError("file field should not be empty.")
             ext = get_file_extension(str(file))
-            allowed_extensions = ['.zip', '.rar', '.pdf', '.xls', '.doc', '.docx']
+            allowed_extensions = ['.zip', '.rar', '.pdf', '.xls', '.xlsx', '.doc', '.docx']
             if not ext.lower() in allowed_extensions:
                 raise serializers.ValidationError("Only ZIP or RAR files are allowed.")
         return files
