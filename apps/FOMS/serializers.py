@@ -13,7 +13,7 @@ class FilesSerializer(serializers.Serializer):
             if file == '':
                 raise serializers.ValidationError("file field should not be empty.")
             ext = get_file_extension(str(file))
-            allowed_extensions = ['.zip', '.rar']
+            allowed_extensions = ['.zip', '.rar', '.pdf', '.xls', '.doc', '.docx']
             if not ext.lower() in allowed_extensions:
                 raise serializers.ValidationError("Only ZIP or RAR files are allowed.")
         return files

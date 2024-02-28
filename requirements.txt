@@ -16,6 +16,7 @@ python-decouple
 Django
 django-storages
 djangorestframework
+gunicorn
 idna
 isodate
 kiwisolver

@@ -19,6 +19,15 @@
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
+    .description {
+      margin-bottom: 20px;
+    }
+
+    .description p {
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+
     .file-row {
       margin-bottom: 10px;
     }
@@ -50,7 +59,7 @@
     }
 
     button.delete {
-      background-color: #f44336;
+      background-color: #45a049;
     }
 
     button.delete:hover {
@@ -65,19 +74,29 @@
 <body>
   <h1>Форма Загрузки Файлов</h1>
 
+  <div class="description">
+    <p>Пожалуйста, загрузите необходимые файлы с указанными ниже инструкциями:</p>
+    <ul>
+      <li>Введите название файла в соответствующем поле.</li>
+      <li>Выберите файл, щелкнув на поле "Выберите файл".</li>
+      <li>Чтобы добавить еще файловую строку, нажмите кнопку "+".</li>
+      <li>Чтобы удалить файловую строку, нажмите кнопку "Удалить".</li>
+      <li>Нажмите кнопку "Отправить файлы", чтобы загрузить файлы.</li>
+    </ul>
+  </div>
+
   <form id="file-form">
     {% csrf_token %}
     <div id="file-container">
       <div class="file-row">
         <input type="text" name="filename" placeholder="Название файла">
         <input type="file" name="file" placeholder="Выберите файл" accept="*">
-        <button type="button" onclick="deleteFileRow(this)">Удалить</button>
+        <button type="button" class="delete" onclick="deleteFileRow(this)">Удалить</button>
       </div>
     </div>
   </form>
 
   <button onclick="addFileRow()">Добавить файловую строку</button>
-  <p></p>
   <button onclick="submitFiles()">Отправить файлы</button>
 
   <script>
@@ -88,7 +107,7 @@
       fileRow.innerHTML = `
         <input type="text" name="filename" placeholder="Название файла">
         <input type="file" name="file" placeholder="Выберите файл" accept="*">
-        <button type="button" onclick="deleteFileRow(this)">Удалить</button>
+        <button type="button" class="delete" onclick="deleteFileRow(this)">Удалить</button>
       `;
       fileContainer.appendChild(fileRow);
     }

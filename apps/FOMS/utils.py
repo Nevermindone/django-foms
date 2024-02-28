@@ -62,3 +62,4 @@ def remove_files(folder_path):
     files = glob.glob(f'{folder_path}/*')
     for f in files:
         os.remove(f)
+    os.rmdir(folder_path)

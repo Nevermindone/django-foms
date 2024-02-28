@@ -22,6 +22,8 @@ class OneRowOfDataKeyword:
     archive_name: [str]
     has_error: bool
     error_message: str
+    main_data_object: bool
+    error_data_object: bool
 
     def to_dict(self):
         return {k: v for k, v in asdict(self).items()}
@@ -36,8 +38,8 @@ class ArchiveFileProcessor:
         self.handler_mapping = {
             '.xls': XlsFileHandler(file=self.file, keyword=self.keyword, current_batch=batch_id),
             '.xlsx': XlsFileHandler(file=self.file, keyword=self.keyword, current_batch=batch_id),
-            '.doc': DocFileHandler(file=self.file, keyword=self.keyword, current_batch=batch_id),
-            '.docx': DocFileHandler(file=self.file, keyword=self.keyword, current_batch=batch_id),
+            # '.doc': DocFileHandler(file=self.file, keyword=self.keyword, current_batch=batch_id),
+            # '.docx': DocFileHandler(file=self.file, keyword=self.keyword, current_batch=batch_id),
             '.pdf': PDFFileHandler(file=self.file, keyword=self.keyword, current_batch=batch_id),
         }
         self.dp = DescriptionProcessor(self.keyword)
@@ -58,10 +60,25 @@ class ArchiveFileProcessor:
                     page=None,
                     archive_name=self.archive_name,
                     has_error=True,
-                    error_message='Файл не верного типа, ожидал excel, doc или pdf'
+                    error_message='Обработчик для данного расширения файла не предусмотрен, '
+                                  'ожидались excel, doc или pdf',
+                    main_data_object=False,
+                    error_data_object=False,
                 )]
             handler_response = handler.process_file()
             data_objects = []
+            if not handler_response:
+                return [OneRowOfDataKeyword(
+                    description=None,
+                    price=None,
+                    file=file,
+                    page=1,
+                    archive_name=self.archive_name,
+                    has_error=False,
+                    error_message='Не найдено совпадений',
+                    main_data_object=False,
+                    error_data_object=False,
+                )]
             for page_from_handler in handler_response:
                 data_object = self._extract_info(page_from_handler)
                 data_objects.append(data_object)
@@ -75,9 +92,12 @@ class ArchiveFileProcessor:
                 description=description,
                 price=price,
                 file=file,
+                page=None,
                 archive_name=self.archive_name,
                 has_error=has_error,
-                error_message=error
+                error_message=error,
+                main_data_object=False,
+                error_data_object=True,
             )
             return [data]
 
@@ -97,6 +117,8 @@ class ArchiveFileProcessor:
             page=page,
             archive_name=self.archive_name,
             has_error=has_error,
-            error_message=error
+            error_message=error,
+            main_data_object=True,
+            error_data_object=False,
         )
         return data
