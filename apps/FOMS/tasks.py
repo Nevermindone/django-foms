@@ -14,7 +14,7 @@ import shutil
 logger = logging.getLogger(__name__)
 
 
-@app.task(time_limit=2500)
+@app.task(time_limit=25000)
 def archive_processor(batch_id, keyword, email):
     archived_files = ArchviedFiles.objects.filter(
         batch_id=batch_id
