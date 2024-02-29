@@ -1,3 +1,5 @@
+import traceback
+
 from apps.FOMS.models import ArchviedFiles
 from apps.FOMS.services.archived_file_processor import ArchiveFileProcessor
 from apps.FOMS.services.excel_creator import ExcelCreator
@@ -52,10 +54,11 @@ def archive_processor(batch_id, keyword, email):
         remove_files(current_pdf_folder)
         remove_files(current_uploads_folder)
     except Exception as e:
-        logger.info(f'Task has failed due to {e}')
+        traceback.format_exc()
+        logger.info(f'Task has failed due to {e}/n {traceback.format_exc()}')
         send_email(
             recipient=email,
-            body=f'Не получилось обработать файлы из за ошибки {e}',
+            body=f'Не получилось обработать файлы из за ошибки {e}  {traceback.format_exc()}',
             subject='Отчёт по ФОМСам'
         )
         remove_files(current_extract_folder)
