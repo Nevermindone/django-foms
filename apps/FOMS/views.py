@@ -29,11 +29,11 @@ class UploadCreateView(APIView):
                 batch=bu
             )
             af.save()
-        # app.send_task(
-        #     "apps.FOMS.tasks.archive_processor",
-        #     [bu.pk, keyword, email],
-        # )
-        archive_processor(bu.pk, keyword, email)
+        app.send_task(
+            "apps.FOMS.tasks.archive_processor",
+            [bu.pk, keyword, email],
+        )
+        # archive_processor(bu.pk, keyword, email)
         return render(request, 'success.html')
 
 
