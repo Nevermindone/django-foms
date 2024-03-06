@@ -1,7 +1,7 @@
 import traceback
 
 from apps.FOMS.models import ArchviedFiles
-from apps.FOMS.services.archived_file_processor import ArchiveFileProcessor
+from apps.FOMS.services.archived_file_processor import ArchiveFileProcessor, OneRowOfDataKeyword
 from apps.FOMS.services.excel_creator import ExcelCreator
 from apps.FOMS.services.unpack_service import Unpacker
 from apps.FOMS.utils import send_email, remove_files, get_file_extension
@@ -34,8 +34,22 @@ def archive_processor(batch_id, keyword, email):
             if ext not in ['.rar', '.zip']:
                 shutil.copy(str(file.file), current_extract_folder)
             else:
-                unp = Unpacker(str(file.file))
-                unp.process(current_extract_folder)
+                try:
+                    unp = Unpacker(str(file.file))
+                    unp.process(current_extract_folder)
+                except Exception as e:
+                    error_data = OneRowOfDataKeyword(
+                        archive_name=str(file.file),
+                        file=str(file.file),
+                        has_error=True,
+                        error_message=str(e),
+                        error_data_object=True,
+                        main_data_object=False,
+                        description='Скорее всего архив поврежден. Проверьте его или обратитесь к администратору.',
+                        price=None,
+                        page=None
+                    )
+                    response_list.append(error_data)
             files = [f for f in os.listdir(os.getcwd() + '/' + current_extract_folder)]
             for archived_file in files:
                 fh = ArchiveFileProcessor(archived_file, keyword, str(file.file), batch_id)
